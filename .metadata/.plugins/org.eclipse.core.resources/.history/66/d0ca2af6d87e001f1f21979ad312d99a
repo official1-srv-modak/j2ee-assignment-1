@@ -1,0 +1,80 @@
+package servlets;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import models.Claim;
+import services.ClaimService;
+import crud.service.CrudService;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+
+/**
+ * Servlet implementation class ClaimServlet
+ */
+@WebServlet("/claims") // URL mapping for claims
+public class ClaimServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+    private final CrudService<Claim> claimService; // Specify Claim as a generic type
+
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public ClaimServlet() {
+        super();
+        claimService = new CrudService<>(Claim.class); // Initialize with the Claim class type
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Logic to retrieve all claims
+        List<Claim> claims = claimService.getAll(); // Use getAll() method to get claims
+        
+        // Set content type for response
+        response.setContentType("text/html");
+        
+        // Get PrintWriter to write response
+        PrintWriter out = response.getWriter();
+        
+        // Write HTML response
+        out.println("<html>");
+        out.println("<head><title>Claim List</title></head>");
+        out.println("<body>");
+        out.println("<h1>Claim List</h1>");
+        out.println("<table border='1'>");
+        out.println("<tr><th>ID</th><th>Policy ID</th><th>Claim Amount</th><th>Status</th></tr>");
+        
+        // Iterate over claims and write each one to the table
+        for (Claim claim : claims) {
+            out.println("<tr>");
+            out.println("<td>" + claim.getClaimId() + "</td>");
+            out.println("<td>" + claim.getPolicyId() + "</td>");
+            out.println("<td>" + claim.getClaimAmount() + "</td>");
+            out.println("<td>" + claim.getStatus() + "</td>");
+            out.println("</tr>");
+        }
+
+        out.println("</table>");
+        out.println("<a href='addClaim.html'>Add New Claim</a>"); // Link to add new claim
+        out.println("</body>");
+        out.println("</html>");
+
+        out.close(); // Close PrintWriter
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Logic to add a new claim
+        String id = request.getParameter("id");
+        String policyId = request.getParameter("policyId");
+        String claimAmount = request.getParameter("claimAmount");
+        String status = request.getParameter("status");
+
+        Claim claim = new Claim(id, policyId, claimAmount, status);
+        claimService.add(claim); // Use the generic add method from CrudService
+
+        response.sendRedirect("claims"); // Redirect to claim list
+    }
+}

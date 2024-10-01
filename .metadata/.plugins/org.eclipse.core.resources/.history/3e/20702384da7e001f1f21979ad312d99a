@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Claim</title>
+</head>
+<body>
+    <h1>Add New Claim</h1>
+    <form action="claims" method="post">
+        <label for="id">Claim ID:</label><br>
+        <input type="text" id="id" name="id" required><br><br>
+
+        <label for="policyId">Policy ID:</label><br>
+        <input type="text" id="policyId" name="policyId" required><br><br>
+
+        <label for="claimAmount">Claim Amount:</label><br>
+        <input type="number" id="claimAmount" name="claimAmount" required><br><br>
+
+        <label for="status">Status:</label><br>
+        <input type="text" id="status" name="status" required><br><br>
+
+        <input type="submit" value="Add Claim">
+    </form>
+    <br>
+    <a href="claims">Back to Claim List</a> <!-- Link to go back to the claim list -->
+</body>
+</html>

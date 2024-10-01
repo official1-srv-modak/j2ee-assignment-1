@@ -1,0 +1,99 @@
+package crud.service;
+
+import com.google.gson.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class CrudService {
+
+    private String filePath;
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+    public CrudService() {
+    }
+    
+    
+    
+
+	public String getFilePath(Object obj) {
+        this.filePath = obj.getClass().getSimpleName()+".json";
+        return this.filePath;
+	}
+
+
+
+
+	// Get all products (as JsonObjects) from the file
+    public List<JsonObject> getAll(Object obj) throws IOException { // Should return the Object Class not json
+    	filePath = getFilePath(obj);
+        File file = new File(filePath);
+        if (!file.exists()) {
+            return new ArrayList<>();
+        }
+        
+        // Read the file
+        try (FileReader reader = new FileReader(file)) {
+            JsonArray jsonArray = gson.fromJson(reader, JsonArray.class);
+            List<JsonObject> jsonObjectList = new ArrayList<>();
+            jsonArray.forEach(jsonElement -> jsonObjectList.add(jsonElement.getAsJsonObject()));
+            return jsonObjectList;
+        }
+    }
+
+    // Get a single product by its ID
+    public JsonObject getById(String id, Object obj) throws IOException { // Should return the Object Class not json
+        return getAll(obj).stream()
+                .filter(jsonObject -> jsonObject.has("id") && jsonObject.get("id").getAsString().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
+
+    // Save all products to the file
+    public void saveAll(List<JsonObject> jsonObjectList, Object obj) throws IOException { // Should accept the object
+        JsonArray jsonArray = new JsonArray();
+        jsonObjectList.forEach(jsonArray::add);
+        
+        this.filePath = getFilePath(obj);
+
+        try (FileWriter writer = new FileWriter(filePath)) {
+            gson.toJson(jsonArray, writer);
+        }
+    }
+
+    // Add a new product
+    public void add(Object obj) throws IOException { // again should accept object
+        List<JsonObject> jsonObjectList = getAll(obj);
+        JsonObject newJsonObject = convertToJson(obj);
+        jsonObjectList.add(newJsonObject);
+        saveAll(jsonObjectList, obj);
+    }
+
+    // Update an existing product by its ID
+    public void update(String id, JsonObject updatedJsonObject, Object obj) throws IOException { // again should accept object
+        List<JsonObject> jsonObjectList = getAll(obj);
+        jsonObjectList = jsonObjectList.stream().map(jsonObject -> {
+            if (jsonObject.has("id") && jsonObject.get("id").getAsString().equals(id)) {
+                return updatedJsonObject;
+            }
+            return jsonObject;
+        }).collect(Collectors.toList());
+        saveAll(jsonObjectList, obj);
+    }
+
+    // Delete a product by its ID
+    public void delete(String id, Object obj) throws IOException { // Guess this is fine
+        List<JsonObject> jsonObjectList = getAll(obj);
+        jsonObjectList.removeIf(jsonObject -> jsonObject.has("id") && jsonObject.get("id").getAsString().equals(id));
+        saveAll(jsonObjectList, obj);
+    }
+    
+    public JsonObject convertToJson(Object object) {
+        JsonObject jsonObject = gson.toJsonTree(object).getAsJsonObject();
+        return jsonObject;
+    }
+}

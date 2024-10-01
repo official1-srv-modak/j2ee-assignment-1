@@ -1,0 +1,30 @@
+package services;
+
+public class PolicyService {
+    private final CrudService crudService = new CrudService();
+
+    // Add new policy
+    public void addPolicy(Policy policy) throws IOException {
+        crudService.add(policy);
+    }
+
+    // Get all policies
+    public List<Policy> getAllPolicies() throws IOException {
+        return (List<Policy>) crudService.getAll(new Policy());
+    }
+
+    // Get policy by ID
+    public Policy getPolicyById(String id) throws IOException {
+        return (Policy) crudService.getById(id, new Policy());
+    }
+
+    // Update policy
+    public void updatePolicy(String id, Policy updatedPolicy) throws IOException {
+        crudService.update(id, updatedPolicy, new Policy());
+    }
+
+    // Delete policy
+    public void deletePolicy(String id) throws IOException {
+        crudService.delete(id, new Policy());
+    }
+}

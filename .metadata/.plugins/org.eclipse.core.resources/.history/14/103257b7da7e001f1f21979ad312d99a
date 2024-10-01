@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Policy</title>
+</head>
+<body>
+    <h1>Add New Policy</h1>
+    <form action="policies" method="post">
+        <label for="id">Policy ID:</label><br>
+        <input type="text" id="id" name="id" required><br><br>
+
+        <label for="name">Policy Name:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="premium">Premium:</label><br>
+        <input type="number" id="premium" name="premium" required><br><br>
+
+        <label for="coverage">Coverage:</label><br>
+        <input type="text" id="coverage" name="coverage" required><br><br>
+
+        <input type="submit" value="Add Policy">
+    </form>
+    <br>
+    <a href="policies">Back to Policy List</a> <!-- Link to go back to the policy list -->
+</body>
+</html>

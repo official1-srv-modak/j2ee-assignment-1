@@ -1,0 +1,30 @@
+package services;
+
+public class ClaimService {
+    private final CrudService crudService = new CrudService();
+
+    // Add new claim
+    public void addClaim(Claim claim) throws IOException {
+        crudService.add(claim);
+    }
+
+    // Get all claims
+    public List<Claim> getAllClaims() throws IOException {
+        return (List<Claim>) crudService.getAll(new Claim());
+    }
+
+    // Get claim by ID
+    public Claim getClaimById(String id) throws IOException {
+        return (Claim) crudService.getById(id, new Claim());
+    }
+
+    // Update claim
+    public void updateClaim(String id, Claim updatedClaim) throws IOException {
+        crudService.update(id, updatedClaim, new Claim());
+    }
+
+    // Delete claim
+    public void deleteClaim(String id) throws IOException {
+        crudService.delete(id, new Claim());
+    }
+}

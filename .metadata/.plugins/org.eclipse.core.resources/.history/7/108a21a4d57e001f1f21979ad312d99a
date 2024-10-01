@@ -1,0 +1,49 @@
+package servlets;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import models.Customer;
+import services.CustomerService;
+
+import java.io.IOException;
+import java.util.List;
+
+/**
+ * Servlet implementation class CustomerServlet
+ */
+public class CustomerServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+    private final CustomerService customerService = new CustomerService();
+
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public CustomerServlet() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Logic to retrieve and display all customers
+        List<Object> customers = customerService.getAllCustomers();
+        request.setAttribute("customers", customers);
+        request.getRequestDispatcher("/customers.jsp").forward(request, response); // JSP page to display customers
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Logic to add a new customer
+        String id = request.getParameter("id");
+        String name = request.getParameter("name");
+        String email = request.getParameter("email");
+        String phone = request.getParameter("phone");
+
+        Customer customer = new Customer(id, name, email, phone);
+        customerService.addCustomer(customer);
+
+        response.sendRedirect("customers"); // Redirect to customer list
+    }
+
+}
