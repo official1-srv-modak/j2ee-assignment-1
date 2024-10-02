@@ -40,12 +40,24 @@ public class CustomerServlet extends HttpServlet {
         
         // Write HTML response
         out.println("<html>");
-        out.println("<head><title>Customer List</title></head>");
+        out.println("<head><title>Customer List</title>");
+        out.println("<style>");
+        out.println("body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }");
+        out.println("h1 { color: #333; }");
+        out.println("table { width: 100%; border-collapse: collapse; margin-top: 20px; }");
+        out.println("th, td { padding: 10px; text-align: center; border: 1px solid #ddd; }");
+        out.println("th { background-color: #295F98; color: #EAE4DD; }");
+        out.println("tr:nth-child(even) { background-color: #f2f2f2; }");
+        out.println("tr:hover { background-color: #ddd; }");
+        out.println("a { display: inline-block; margin-top: 20px; padding: 10px 15px; background-color: #295F98; color: #EAE4DD; text-decoration: none; border-radius: 5px; }");
+        out.println("a:hover { background-color: #EAE4DD;color:#295F98; }");
+        out.println("</style>");
+        out.println("</head>");
         out.println("<body>");
         out.println("<h1>Customer List</h1>");
-        out.println("<table border='1'>");
+        out.println("<table>");
         out.println("<tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th></tr>");
-        
+
         // Iterate over customers and write each one to the table
         for (Customer customer : customers) {
             out.println("<tr>");
